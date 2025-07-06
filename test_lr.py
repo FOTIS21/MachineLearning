@@ -25,23 +25,6 @@ test_rmse = np.sqrt(test_mse)
 
 print(f"RMSE: {test_rmse:.4f}")
 
-# 20 επαναλήψεις
-for i in range(20000):
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.3
-    )
-    model = LinearRegression()
-    model.fit(X_train, y_train)
-    _, test_mse = model.evaluate(X_test, y_test)
-    rmse_list.append(np.sqrt(test_mse))
-
-# Υπολογισμός μέσης τιμής και τυπικής απόκλισης
-mean_rmse = np.mean(rmse_list)
-std_rmse = np.std(rmse_list)
-
-print(f"Μέση τιμή RMSE 20 φορές: {mean_rmse:.4f}")
-print(f"Τυπική απόκλιση RMSE 20 φορές: {std_rmse:.4f}")
-
 sk_learn_model = SKLearn()
 sk_learn_model.fit(X_train, y_train)
 y_pred = sk_learn_model.predict(X_test)
@@ -51,13 +34,30 @@ print(f"\n *[scikit-learn]* \nRMSE: {sk_rmse:.4f}")
 
 sk_rmse_list = []
 
-for i in range(20000):
+# 20 επαναλήψεις
+for i in range(20):
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.3
+    )
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+    _, test_mse = model.evaluate(X_test, y_test)
+    rmse_list.append(np.sqrt(test_mse))
+
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
     sk_linear_model = SKLearn()
     sk_linear_model.fit(X_train, y_train)
     y_pred = sk_linear_model.predict(X_test)
     sk_mse = mean_squared_error(y_test, y_pred)
     sk_rmse_list.append(np.sqrt(sk_mse))
+
+
+# Υπολογισμός μέσης τιμής και τυπικής απόκλισης
+mean_rmse = np.mean(rmse_list)
+std_rmse = np.std(rmse_list)
+
+print(f"Μέση τιμή RMSE 20 φορές: {mean_rmse:.4f}")
+print(f"Τυπική απόκλιση RMSE 20 φορές: {std_rmse:.4f}")
 
 sk_mean_rmse = np.mean(sk_rmse_list)
 sk_std_rmse = np.std(sk_rmse_list)
